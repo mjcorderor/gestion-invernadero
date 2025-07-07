@@ -1,0 +1,46 @@
+<div class="contenedor">
+  <h2><mat-icon>storefront</mat-icon> Invernaderos</h2>
+
+  <!-- Filtro de búsqueda -->
+  <div class="buscador">
+    <input type="text" [(ngModel)]="buscando" (input)="filtrarInvernaderos()" placeholder="🔍 Buscar invernadero..." />
+  </div>
+
+  <!-- Botón de agregar -->
+  <button class="btn-agregar" (click)="abrirDialogoAgregar()">
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <!-- Tabla de invernaderos -->
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Ubicación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let invernadero of invernaderosFiltrados">
+        <td *ngIf="editandoId !== invernadero.id">{{ invernadero.name }}</td>
+        <td *ngIf="editandoId !== invernadero.id">{{ invernadero.location }}</td>
+
+        <td *ngIf="editandoId === invernadero.id">
+          <input type="text" [(ngModel)]="invernadero.name" />
+        </td>
+        <td *ngIf="editandoId === invernadero.id">
+          <input type="text" [(ngModel)]="invernadero.location" />
+        </td>
+
+        <td>
+          <button (click)="editarInvernadero(invernadero)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="desactivarInvernadero(invernadero.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

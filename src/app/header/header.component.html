@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+    <!-- Izquierda: Bienvenida -->
+    <span>Bienvenido, {{ userName }}</span>
+  
+    <!-- Centro: Ícono de casa, clickeable para ir a Home -->
+    <span class="center-icon" routerLink="/home" style="cursor: pointer;">
+      <mat-icon>home</mat-icon>
+    </span>
+  
+    <!-- Derecho: Botón de cerrar sesión -->
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="logout()" aria-label="Cerrar sesión">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </mat-toolbar>
+  

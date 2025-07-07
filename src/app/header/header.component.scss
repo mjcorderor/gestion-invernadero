@@ -1,0 +1,13 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+  
+  /* Centrar el ícono de casa */
+  .center-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+  }
+  

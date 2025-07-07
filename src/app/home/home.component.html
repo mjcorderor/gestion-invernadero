@@ -1,0 +1,16 @@
+<div class="board-container">
+    <div class="board-grid">
+      <div class="board-card" *ngFor="let option of boardOptions" (click)="navigate(option.route)">
+        <mat-card>
+          <mat-card-header>
+            <mat-icon class="board-icon">{{ option.icon }}</mat-icon>
+          </mat-card-header>
+          <mat-card-content>
+            <h3>{{ option.title }}</h3>
+            <p>{{ option.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,19 @@
+<div class="form-container">
+  <h3>{{ invernadero ? 'Editar' : 'Agregar' }} Invernadero</h3>
+  <form [formGroup]="invernaderoForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ubicación</mat-label>
+      <input matInput formControlName="location">
+    </mat-form-field>
+
+    <div class="button-group">
+      <button mat-raised-button color="primary" (click)="onGuardar()">Guardar</button>
+      <button mat-button (click)="onCancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>
