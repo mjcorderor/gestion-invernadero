@@ -1,38 +1,46 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Injectable, inject } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  setDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
+  CollectionReference
+} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Invernadero } from '../models/invernadero.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvernaderoService {
+  private firestore: Firestore = inject(Firestore);
   private collectionName = 'invernaderos';
 
-  constructor(private afs: AngularFirestore) {}
-
   getInvernaderos(): Observable<Invernadero[]> {
-
-    return this.afs
-      .collection<Invernadero>(this.collectionName, ref =>
-        ref.where('activo', '==', true)
-      )
-      .valueChanges({ idField: 'id' });
+    const ref = collection(this.firestore, this.collectionName) as CollectionReference<Invernadero>;
+    const q = query(ref, where('activo', '==', true));
+    return collectionData<Invernadero>(q, { idField: 'id' });
   }
 
   agregarInvernadero(invernadero: Invernadero): Promise<void> {
-    const id = this.afs.createId();
-    return this.afs
-      .collection(this.collectionName)
-      .doc(id)
-      .set({ ...invernadero, id, activo: true });
+    const id = uuidv4(); // Usamos UUID para emular `afs.createId()`
+    const ref = doc(this.firestore, `${this.collectionName}/${id}`);
+    return setDoc(ref, { ...invernadero, id, activo: true });
   }
 
   actualizarInvernadero(id: string, invernadero: Partial<Invernadero>): Promise<void> {
-    return this.afs.collection(this.collectionName).doc(id).update(invernadero);
+    const ref = doc(this.firestore, `${this.collectionName}/${id}`);
+    return updateDoc(ref, invernadero);
   }
 
   desactivarInvernadero(id: string): Promise<void> {
-    return this.afs.collection(this.collectionName).doc(id).update({ activo: false });
+    const ref = doc(this.firestore, `${this.collectionName}/${id}`);
+    return updateDoc(ref, { activo: false });
   }
 }

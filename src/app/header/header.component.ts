@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import firebase from 'firebase/compat/app';
+
 import { Observable } from 'rxjs';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 
 export class HeaderComponent implements OnInit {
-  user$: Observable<firebase.User | null>;
+  user$: Observable<User | null>;
   userName: string = '';
 
   constructor(private authService: AuthService) {

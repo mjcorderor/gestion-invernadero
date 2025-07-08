@@ -1,35 +1,42 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
+import { Injectable, inject } from '@angular/core';
+import {
+  Auth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  User,
+  UserCredential
+} from '@angular/fire/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<firebase.User | null>(null);
-  public user$: Observable<firebase.User | null> = this.currentUserSubject.asObservable();
+  private auth: Auth = inject(Auth);
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public user$: Observable<User | null> = this.currentUserSubject.asObservable();
 
-  constructor(private afAuth: AngularFireAuth) {
-    // Vinculamos el estado de authState de compat
-    this.afAuth.authState.subscribe(user => {
+  constructor() {
+    onAuthStateChanged(this.auth, user => {
       this.currentUserSubject.next(user);
     });
   }
 
-  register(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.createUserWithEmailAndPassword(email, password);
+  register(email: string, password: string): Promise<UserCredential> {
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  login(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+  login(email: string, password: string): Promise<UserCredential> {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
   logout(): Promise<void> {
-    return this.afAuth.signOut();
+    return signOut(this.auth);
   }
 
-  getCurrentUser(): Promise<firebase.User | null> {
-    return this.afAuth.currentUser;
+  getCurrentUser(): Promise<User | null> {
+    return Promise.resolve(this.auth.currentUser);
   }
 }

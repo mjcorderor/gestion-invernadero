@@ -33,21 +33,11 @@ export class InvernaderoComponent implements OnInit {
   } */
 
   ngOnInit(): void {
-    try{
-      this.appRef.isStable.subscribe(stable => {
-      if (stable) {
-        this.invernaderos$ = this.invernaderoService.getInvernaderos();
-        this.invernaderos$.subscribe((data) => {
-          this.invernaderos = data;
-          this.invernaderosFiltrados = [...data];
-        });
-      }
+    this.invernaderos$ = this.invernaderoService.getInvernaderos();
+    this.invernaderos$.subscribe((data) => {
+      this.invernaderos = data;
+      this.invernaderosFiltrados = [...data];
     });
-    }
-    catch (error) {
-      console.error('Error al inicializar el componente Invernadero:', error);
-    }
-    
   }
 
   filtrarInvernaderos(): void {
@@ -65,6 +55,7 @@ export class InvernaderoComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (resultado: Invernadero | undefined) => {
       if (resultado) {
         await this.invernaderoService.agregarInvernadero(resultado);
+        this.ngOnInit();
       }
     });
   }
